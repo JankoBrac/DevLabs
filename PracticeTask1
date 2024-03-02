@@ -1,0 +1,10 @@
+def main():
+    a = float(input("duzina stranice a: "))
+    b = float(input("duzina stranice b: "))
+    povrsina = a * b
+    obim = 2 * (a + b)
+    print("Površina pravougaonika je:", povrsina)
+    print("Obim pravougaonika je:", obim)
+
+if __name__ == "__main__":
+    main()
