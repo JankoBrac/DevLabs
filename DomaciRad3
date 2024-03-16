@@ -1,0 +1,281 @@
+#1
+def get_words_ends_with_letter(sentence, letter):
+
+    sentences = sentence.split(".")
+    
+    result = []
+    
+    for s in sentences:
+
+        words = s.split()
+        ends_with_letter = [w for w in words if w.endswith(letter)]
+        result.append((ends_with_letter, len(ends_with_letter)))
+    
+    return result
+
+result = get_words_ends_with_letter("Jednostavna recenica kao primjer za zadatak.", "e")
+print(result)
+
+
+#2
+
+def maxSequence(lst):
+    maxProduct = 0
+    maxSequence = []
+    
+    i = 0
+    while i < len(lst):
+        j = i + 1
+        while j <= len(lst):
+        
+            currentSequence = lst[i:j]
+            product = 1
+            for num in currentSequence:
+                product *= num
+            
+            if product > maxProduct:
+                maxProduct = product
+                maxSequence = currentSequence
+            j += 1
+        i += 1
+
+    return maxSequence, maxProduct
+
+lst = [1,3,3,5,5,5,2,2,1,3,2,2,2,2]
+sequence, product = maxSequence(lst)
+print("Sekvenca:", sequence)
+print("Proizvod:", product)
+
+
+#3
+
+def longestZigzag(nums):
+    n = len(nums)
+    if n <= 1:
+        return nums
+
+    dp = [1] * n
+    maxLen = 1
+
+    for i in range(1, n):
+        for j in range(i):
+            if nums[i] > nums[j] and dp[i] <= dp[j]:
+                dp[i] = dp[j] + 1
+            elif nums[i] < nums[j] and dp[i] <= dp[j]:
+                dp[i] = dp[j] + 1
+
+            max_len = max(maxLen, dp[i])
+
+    result = []
+    for i in range(n - 1, -1, -1):
+        if dp[i] == max_len:
+            result.append(nums[i])
+            maxLen -= 1
+
+    result.reverse()
+
+    return result
+
+nums = [1, 7, 4, 9, 2, 5]
+print("Najduzi testerasti podniz:", longestZigzag(nums))
+
+
+#4
+
+def ponavljanje(string):
+    count = 0
+    n = len(string)
+    
+    for i in range(n - 1):
+        if string[i] == string[i + 1]:
+            count += 1
+    
+    return count
+
+string = "Najjaci"
+print("Broj ponavljanja karaktera:", ponavljanje(string))
+
+#5
+
+def najgoriOdnos(podcasts):
+    najgoriPodcast = None
+    najgoriOdnos = float('inf')
+
+    for podcast in podcasts:
+        naziv = podcast['naziv']
+        brPozitivni = podcast['br_pozitivni']
+        brNegativni = podcast['br_negativni']
+
+        odnos = brPozitivni / brNegativni if brNegativni != 0 else float('inf')
+
+        if odnos < najgoriOdnos:
+            najgoriPodcast = naziv
+            najgoriOdnos = odnos
+
+    return najgoriPodcast
+
+podcasts = [
+    {'naziv': 'Español para principiantes', 'br_pozitivni': 1000, 'br_negativni': 10},
+    {'naziv': 'Philophize This!', 'br_pozitivni': 500, 'br_negativni': 30},
+    {'naziv': 'Science VS.', 'br_pozitivni': 600, 'br_negativni': 45}
+]
+
+print("Najgori podcast:", najgoriOdnos(podcasts))
+
+
+#6
+
+class Televizor:
+    def __init__(self):
+        self.tekuciKanal = 0
+        self.nazivKanala = ""
+        self.kanali = []
+        self.jacinaTona = 0
+
+    def postaviTekuciKanal(self, broj):
+        if 0 <= broj < len(self.kanali):
+            self.tekuciKanal = broj
+            self.nazivTekucegKanala = self.kanali[broj]
+
+    def postaviJacinuTona(self, jacina):
+        if 0 <= jacina <= 10:
+            self.jacinaTona = jacina
+
+    def dodajKanal(self, naziv):
+        self.kanali.append(naziv)
+
+    def obrisiKanal(self, naziv):
+        if naziv in self.kanali:
+            self.kanali.remove(naziv)
+
+    def pojacajTon(self):
+        if self.jacinaTona < 10:
+            self.jacinaTona += 1
+
+    def imeTanala(self, broj):
+        if 1 <= broj <= len(self.kanali):
+            return self.kanali[broj - 1]
+        else:
+            return "Nema kanala sa tim brojem"
+
+
+#7
+        
+class Book:
+
+    def __init__(self, naslov, autor, godina_izdanja, broj_kopija):
+        self.naslov = naslov
+        self.autor = autor
+        self.godina_izdanja = godina_izdanja
+        self.broj_kopija = broj_kopija
+
+    def set_naslov(self, naslov):
+        self.naslov = naslov
+
+    def set_autor(self, autor):
+        self.autor = autor
+
+    def set_godina_izdanja(self, godina_izdanja):
+        self.godina_izdanja = godina_izdanja
+
+    def set_broj_kopija(self, broj_kopija):
+        self.broj_kopija = broj_kopija
+
+    def get_naslov(self):
+        return self.naslov
+
+    def get_autor(self):
+        return self.autor
+
+    def get_godina_izdanja(self):
+        return self.godina_izdanja
+
+    def get_broj_kopija(self):
+        return self.broj_kopija
+
+
+class Library:
+    def __init__(self):
+        self.inventar = []
+
+    def dodaj_knjigu(self, book):
+        self.inventar.append(book)
+
+    def obrisi_knjigu(self, naslov):
+        for book in self.inventar:
+            if book.get_naslov() == naslov:
+                self.inventar.remove(book)
+                return True
+        return False
+
+    def pretraga_po_naslovu(self, naslov):
+        for book in self.inventar:
+            if naslov.lower() in book.get_naslov().lower():
+                print(f"Naslov: {book.get_naslov()}, Autor: {book.get_autor()}, Godina izdanja: {book.get_godina_izdanja()}")
+
+    def pretraga_po_autoru(self, autor):
+        for book in self.inventar:
+            if autor.lower() in book.get_autor().lower():
+                print(f"Naslov: {book.get_naslov()}, Autor: {book.get_autor()}, Godina izdanja: {book.get_godina_izdanja()}")
+
+    def prikazi_dostupne_knjige(self):
+        for book in self.inventar:
+            print(f"Naslov: {book.get_naslov()}, Autor: {book.get_autor()}, Godina izdanja: {book.get_godina_izdanja()}")
+
+
+# Glavni program
+def main():
+    biblioteka = Library()
+
+    while True:
+        print("\nDobrodošli u biblioteku!")
+        print("1. Dodaj knjigu")
+        print("2. Pregled knjiga")
+        print("3. Uredi knjigu")
+        print("4. Obriši knjigu")
+        print("5. Pretraga po naslovu")
+        print("6. Pretraga po autoru")
+        print("7. Izlaz")
+
+        opcija = input("Izaberite opciju: ")
+
+        if opcija == "1":
+            naslov = input("Unesite naslov knjige: ")
+            autor = input("Unesite autora knjige: ")
+            godina_izdanja = input("Unesite godinu izdanja knjige: ")
+            broj_kopija = input("Unesite broj kopija knjige: ")
+            knjiga = Book(naslov, autor, godina_izdanja, broj_kopija)
+            biblioteka.dodaj_knjigu(knjiga)
+            print("Knjiga je uspješno dodata u inventar.")
+        elif opcija == "2":
+            biblioteka.prikazi_dostupne_knjige()
+        elif opcija == "3":
+            naslov = input("Unesite naslov knjige koju želite urediti: ")
+            for book in biblioteka.inventar:
+                if book.get_naslov() == naslov:
+                    novi_naslov = input("Unesite novi naslov knjige: ")
+                    book.set_naslov(novi_naslov)
+                    print("Naslov knjige uspješno ažuriran.")
+        elif opcija == "4":
+            naslov = input("Unesite naslov knjige koju želite obrisati: ")
+            if biblioteka.obrisi_knjigu(naslov):
+                print("Knjiga je uspješno obrisana iz inventara.")
+            else:
+                print("Knjiga nije pronađena u inventaru.")
+        elif opcija == "5":
+            naslov = input("Unesite naslov knjige koju tražite: ")
+            biblioteka.pretraga_po_naslovu(naslov)
+        elif opcija == "6":
+            autor = input("Unesite autora knjige koju tražite: ")
+            biblioteka.pretraga_po_autoru(autor)
+        elif opcija == "7":
+            print("Hvala što ste koristili našu biblioteku. Doviđenja!")
+            break
+        else:
+            print("Neispravna opcija. Molimo izaberite ponovo.")
+
+
+if __name__ == "__main__":
+    main()
+
+        
