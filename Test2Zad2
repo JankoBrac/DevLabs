@@ -1,0 +1,53 @@
+#Zad2
+import requests
+from bs4 import BeautifulSoup
+import csv
+
+url = "https://www.realitica.com/nekretnine/central%20point/podgorica/Crna-Gora/"
+
+response = requests.get(url)
+
+if response.status_code == 200:
+
+    soup = BeautifulSoup(response.text, 'html.parser')
+
+    #Elementi koji sadrze linkove do nekretnina
+    links = soup.find_all('div', class_='thumb_div')
+
+    # Otvaranje CSV fajla za pisanje
+    with open('nekretnine.csv', 'w', newline='', encoding='utf-8') as csvfile:
+        fieldnames = ['vrsta', 'lokacija', 'cijena', 'web_stranica']
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+
+        # Pisanje zaglavlja CSV fajla
+        writer.writeheader()
+
+        # Iteriranje kroz sve linkove do nekretnina
+        for link in links:
+            # Preuzimanje URL nekretnine
+            nekretnina_url = link.find('a')['href']
+            
+            # Slanje GET zahtjeva za HTML sadrzajem svake nekretnine
+            nekretnina_response = requests.get(nekretnina_url)
+            if nekretnina_response.status_code == 200:
+                nekretnina_soup = BeautifulSoup(nekretnina_response.text, 'html.parser')
+
+                # Prikupljanje osnovnih informacija o nekretnini
+                vrsta = "Stan"
+                lokacija = "Podgorica, Crna Gora"
+                cijena = nekretnina_soup.find('span', itemprop='price').text.strip()
+                web_stranica = nekretnina_url
+
+                # Upisivanje podataka o nekretnini u CSV fajl
+                writer.writerow({
+                    'vrsta': vrsta,
+                    'lokacija': lokacija,
+                    'cijena': cijena,
+                    'web_stranica': web_stranica
+                })
+
+    print("Podaci su sacuvani u nekretnine.csv.")
+else:
+    print("Greska")
+
+
