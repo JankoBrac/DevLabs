@@ -1,0 +1,32 @@
+#zadatak1
+import pandas as pd
+
+dataset = pd.read_csv('2021_Cars_Raw.csv')
+
+odabrana_kolona = 'E'
+najmanja_vrijednost = dataset[odabrana_kolona].min()
+najveca_vrijednost = dataset[odabrana_kolona].max()
+
+# Izracunavanje prosjecne vrijednosti po koloni
+prosjek = dataset[odabrana_kolona].mean()
+
+# Racunanje procentualne razlike izmedju prosjecne i najvece vrijednosti u koloni
+procentualna_razlika = ((najveca_vrijednost - prosjek) / prosjek) * 100
+
+# Normalizacija vrijednosti u odabranoj koloni na raspon od 0 do 1
+normalized_column = (dataset[odabrana_kolona] - dataset[odabrana_kolona].min()) / (dataset[odabrana_kolona].max() - dataset[odabrana_kolona].min())
+
+# Azuriranje fajla sa normalizovanim vrijednostima
+dataset[odabrana_kolona] = normalized_column
+
+# Naci dvije kolone koje imaju najvecu pozitivnu i najvecu negativnu korelaciju
+korelacija = dataset.corr().unstack().sort_values(ascending=False).drop_duplicates()
+najveca_pozitivna_korelacija = korelacija[korelacija < 1].head(1)
+najveca_negativna_korelacija = korelacija.tail(1)
+
+print("Najmanja vrijednost u koloni:", najmanja_vrijednost)
+print("Najveca vrijednost u koloni:", najveca_vrijednost)
+print("Prosjecna vrijednost u koloni:", prosjek)
+print("Procentualna razlika izmedju prosjecne i najvece vrijednosti:", procentualna_razlika)
+print("Najveca pozitivna korelacija:", najveca_pozitivna_korelacija)
+print("Najveca negativna korelacija:", najveca_negativna_korelacija)
